@@ -1,0 +1,44 @@
+---
+title: "Plotly project 2"
+author: "Jesse Holling"
+date: "May 1, 2017"
+output: 
+  ioslides_presentation: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Mileage vs Horsepower
+#### * points are weighted
+
+```{r load data,include=FALSE}
+suppressWarnings(library(plotly))
+```
+
+```{r, echo=FALSE}
+
+set.seed(123) #need for scattr only
+#plot_ly(mtcars,x=~mpg,y=~hp,color=~disp, type="scatter", mode="markers",size=~wt)  #scatter+color+crosshairs
+
+
+
+
+p<-plot_ly(mtcars,x=~mpg,y=~hp,color=~disp, size=~wt) %>%
+    add_markers() %>%
+    add_fun(function(anno_mpg){
+     anno_mpg %>% slice(which.max(mpg)) %>%
+        add_annotations("High mileage") }) %>%
+    add_fun(function(anno_hp){
+        anno_hp %>% slice(which.max(hp)) %>%
+        add_annotations("High Horsepower") }) %>%
+    add_fun(function(anno_wt){
+        anno_wt %>% slice(which.max(wt)) %>%
+    add_annotations("Heavy Weight") %>%
+    config(displayModeBar = F)})    
+
+p
+
+```
